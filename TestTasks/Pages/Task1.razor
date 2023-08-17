@@ -1,0 +1,60 @@
+﻿@page "/task1"
+
+<PageTitle>Задание №1</PageTitle>
+
+@using TestTasks.Models
+@using TestTasks.Controllers
+@using TestTasks.Services
+
+@inject ArrayAddDeleteService addDeleteService
+@inject ArrayProcessingService arrayProcessingService
+
+<h3>Задание №1</h3>
+
+<EditForm Model="@arrayController">
+
+    <div>
+        <label>
+            Реализовать приложение C#, которое предоставит функционал сложения каждого второго нечетного числа из массива чисел тела запроса и вернёт их сумму по модулю.
+        </label>
+    </div>
+
+
+    <div>
+        <button @onclick="AddElement">Добавить поле</button>
+    </div>
+
+    @foreach (Element temp in arrayController.getArray(addDeleteService))
+    {
+        <div>
+            <InputNumber id=@temp.Id @bind-Value="@temp.data" ParsingErrorMessage="Вводите целые только числа"></InputNumber>
+            @if (arrayController.getArray(addDeleteService).Length != 1)
+            {
+                <button id=@temp.Id @onclick="@(() => DeleteElement(temp.Id))">-</button>
+            }
+        </div>
+    }
+
+    <p>Текущий массив: @ViewArray()</p>
+    <p>Сумма по модулю каждого второго нечетного элемента массива: @ModuloSumEverySecondOddNumber()</p>
+
+</EditForm>
+
+
+@code {
+    private ArrayController arrayController = new ArrayController();
+
+    void AddElement() => arrayController.addInArray(addDeleteService);
+
+    void DeleteElement(int id) => arrayController.deleteFromArray(addDeleteService, id);
+
+    string ViewArray()
+    {
+        return arrayController.viewArray(arrayProcessingService, addDeleteService);
+    }
+
+    int ModuloSumEverySecondOddNumber()
+    {
+        return arrayController.arraySum(arrayProcessingService, addDeleteService);
+    }
+}

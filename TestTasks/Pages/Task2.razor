@@ -1,0 +1,36 @@
+﻿@page "/task2"
+
+<PageTitle>Задание №2</PageTitle>
+
+@using TestTasks.Models
+@using TestTasks.Controllers
+@using TestTasks.Services
+
+@inject PalindromeService palindromeService
+
+<h3>Задание №2</h3>
+
+<EditForm Model="@stringController">
+
+    <div>
+        <label>
+            Реализовать приложение C#, которое предоставит функционал определения входящий строки на предмет, является ли она палиндромом.
+        </label>
+    </div>
+
+    <InputText @bind-Value="str"></InputText>
+
+    <p>Является ли введенная строка палиндромом: @IsPalindrome()</p>
+
+</EditForm>
+
+@code {
+
+    private string str = "";
+    private StringController stringController = new StringController();
+
+    bool IsPalindrome()
+    {
+        return stringController.IsPalindrome(palindromeService, str);
+    }
+}

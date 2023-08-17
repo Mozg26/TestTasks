@@ -1,0 +1,57 @@
+﻿@page "/task3"
+
+<PageTitle>Задание №3</PageTitle>
+
+@using TestTasks.Models
+@using TestTasks.Services
+@using TestTasks.Controllers
+
+@inject ListAddDeleteService listAddDeleteService
+@inject SortListService sortListService
+
+<h3>Задание №3</h3>
+
+<EditForm Model="@listController">
+
+    <div>
+        <label>
+            Реализовать приложение C#, которое отсортирует и выведет список целых чисел. Алгоритм сортировки, а также структуру данных, в которой будет производиться сортировка – необходимо написать самостоятельно. Если используется более одной структуры – необходимо написать самостоятельно только одну на выбор. Алгоритм сортировки можно взять любой, (быстрая, пузырьковая, вставками и т.д.), структуру данных так же можно взять любую (лист любого вида, словарь, дерево любого вида и т.д.).
+        </label>
+    </div>
+
+    <div>
+        <button @onclick="AddNodeOnRight">Добавить поле</button>
+    </div>
+
+    @foreach (Node temp in listController.GetList(listAddDeleteService))
+    {
+        <div>
+            <InputNumber id=@temp.Id @bind-Value="@temp.value" ParsingErrorMessage="Вводите целые только числа"></InputNumber>
+            @if (listController.GetCount(listAddDeleteService) != 1)
+            {
+                <button id=@temp.Id @onclick="@(() => DeleteNode(temp.Id))">-</button>
+            }
+        </div>
+    }
+
+    <div>
+        <button @onclick="SortList">Сортировать список</button>
+    </div>
+
+    <p>Текущий список: @ViewList()</p>
+
+</EditForm>
+
+@code {
+
+    private ListController listController = new ListController();
+
+    void AddNodeOnRight() => listController.AddInList(listAddDeleteService);
+
+    string ViewList() => listController.ViewList(listAddDeleteService);
+
+    void SortList() => listController.SortList(listAddDeleteService, sortListService);
+
+    void DeleteNode(int Id) => listController.DeleteNode(listAddDeleteService, Id);
+
+}
